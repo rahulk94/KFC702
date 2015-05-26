@@ -21,33 +21,10 @@ import android.os.Message;
 
 public class MainActivity extends ActionBarActivity {
 
-    private ArrayAdapter<String> mLogEntryAdapter;
-
-    private Handler mHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case 1:
-                    final List<String> lines = (List<String>) msg.obj;
-                    for (String s: lines) {
-                        mLogEntryAdapter.add(s);
-                    }
-                    break;
-                case 2:
-                    mLogEntryAdapter.clear();
-                    break;
-            }
-        }
-    };
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-//        Logcat logcat = new Logcat(this, mHandler);
-//        logcat.start();
         loadList();
     }
 
