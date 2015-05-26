@@ -23,6 +23,7 @@ import java.io.InputStreamReader;
 public class MainActivity extends ActionBarActivity {
 
     RunLogcatInBackground logcat;
+    //Contains a List of logging messages from apps. No duplicates exist in the List
     private static List<String> listViewContent = new ArrayList<String>();
 
     @Override
@@ -97,43 +98,46 @@ public class MainActivity extends ActionBarActivity {
     //A inner class that runs a process in the background
     public class RunLogcatInBackground extends AsyncTask<Void, String, Void> {
 
-        private static final String TAG = "DoSomethingTask";
+        private static final String TAG = "BackgroundProcessTag";
         private static final int DELAY = 5000; // 5 seconds
         private static final int RANDOM_MULTIPLIER = 10;
 
+        //Log execution methods
         @Override
         protected void onPreExecute() {
-            Log.v(TAG, "starting the Random Number Task");
+            Log.v(TAG, "Starting the background task");
             super.onPreExecute();
         }
 
         @Override
         protected void onProgressUpdate(String... values) {
-            Log.v(TAG, "reporting back from the Random Number Task");
+            Log.v(TAG, "Reporting back from the background task");
             updateResults(values[0].toString());
             super.onProgressUpdate(values);
         }
 
         @Override
         protected void onCancelled(Void result) {
-            Log.v(TAG, "cancelled the Random Number Task");
+            Log.v(TAG, "Cancelled the background task");
             super.onCancelled(result);
         }
 
         @Override
         protected Void doInBackground(Void... params) {
-            Log.v(TAG, "doing work in Random Number Task");
+            Log.v(TAG, "Doing work in the background task");
             try {
                 //Execute this command in the background
                 Process process = Runtime.getRuntime().exec("su logcat -s CS702");
                 BufferedReader br = new BufferedReader(new InputStreamReader(process.getInputStream()));
                 String line;
 
+                //While there is another line available for the bufferedReader to read
                 while((line = br.readLine()) != null)
                 {
-                    //tv.append("" + character);
                     int index = line.indexOf("CS702");
+                    //If the line contains CS702
                     if (index != -1) {
+                        //Format the String and add it to the List of messages being displayed
                         String tag = line.substring(index);
                         String message = tag.substring(tag.indexOf(":")+1);
 
@@ -143,13 +147,12 @@ public class MainActivity extends ActionBarActivity {
                             listViewContent.remove(message);
                             listViewContent.add(message);
                         }
-//                        publishProgress("LINE - " + tag);
                     }
                 }
             }
             catch(IOException e) {
             }
-            
+
             return null;
         }
 

@@ -6,7 +6,7 @@
     android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context="com.getterekt.kentucy_fried_cecurity.FullListView">
 
-    <TextView android:text="@string/hello_world"
+    <TextView android:text="Full list view screen"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
