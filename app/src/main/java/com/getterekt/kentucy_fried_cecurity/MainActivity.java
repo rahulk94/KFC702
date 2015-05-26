@@ -23,10 +23,10 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-
 public class MainActivity extends ActionBarActivity {
 
     RunLogcatInBackground logcat;
+    //Contains a List of logging messages from apps. No duplicates exist in the List
     private static List<String> listViewContent = new ArrayList<String>();
     private static List<String> listViewAccess = new ArrayList<String>();
     private static List<String> listViewTime = new ArrayList<String>();
@@ -45,7 +45,6 @@ public class MainActivity extends ActionBarActivity {
         super.onResume();
 //        Log.v("CS702", "OnResume called");
 //        loadList();
-//        listViewContent.add("test");
     }
 
     @Override
@@ -70,6 +69,7 @@ public class MainActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    //Start the full list view activity
     public void fullListViewLoad(View v) {
         Log.v("CS702", "Full list view button pushed");
         Intent i = new Intent(this, FullListView.class);
@@ -77,6 +77,7 @@ public class MainActivity extends ActionBarActivity {
 
     }
 
+    //Start the permissions view activity
     public void permissionsViewLoad(View v) {
         Log.v("CS702", "Permissions button pushed");
         Intent i = new Intent(this, PermissionsView.class);
@@ -89,22 +90,13 @@ public class MainActivity extends ActionBarActivity {
 //    }
 
     public void loadList() {
-//        Log.v("CS702", "List loaded");
         ListView listView = (ListView) findViewById(R.id.summaryList);
-//        ListView listView3 = (ListView) findViewById(R.id.summaryList3);
 
-//        List<FileAccess> fileAccessList = new ArrayList<FileAccess>();
-//        fileAccessList.add(new FileAccess("App", "Accessed", "Time") {
-//            public String toString() {
-//                return "App\t\t  Accessed\t\t  Time";
-//            }
-//        });
-//        fileAccessList.add(new FileAccess("Facebook", "usr/folders/photos", "2min ago"));
-//        fileAccessList.add(new FileAccess("Instagram", "usr/folders/videos", "12pm"));
-//        fileAccessList.add(new FileAccess("Firedroid", "usr/folders/contacts", "10am"));
 
+        //Reverse the list so that the newest Log message is at the top
         Collections.reverse(listViewContent);
 
+        //Set up the ListView using a basic ArrayAdapter
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, listViewContent);
         listView.setAdapter(adapter);
 
@@ -112,15 +104,17 @@ public class MainActivity extends ActionBarActivity {
 //        listView3.setAdapter(adapterTime);
     }
 
+    //A inner class that runs a process in the background
     public class RunLogcatInBackground extends AsyncTask<Void, String, Void> {
 
-        private static final String TAG = "DoSomethingTask";
+        private static final String TAG = "BackgroundProcessTag";
         private static final int DELAY = 5000; // 5 seconds
         private static final int RANDOM_MULTIPLIER = 10;
 
+        //Log execution methods
         @Override
         protected void onPreExecute() {
-            Log.v(TAG, "starting the Random Number Task");
+            Log.v(TAG, "Starting the background task");
             super.onPreExecute();
         }
 
@@ -128,30 +122,32 @@ public class MainActivity extends ActionBarActivity {
         protected void onProgressUpdate(String... values) {
             Log.v(TAG, "reporting back from the Random Number Task");
 //            updateResults(values[0].toString());
+
             super.onProgressUpdate(values);
         }
 
         @Override
         protected void onCancelled(Void result) {
-            Log.v(TAG, "cancelled the Random Number Task");
+            Log.v(TAG, "Cancelled the background task");
             super.onCancelled(result);
         }
 
         @Override
         protected Void doInBackground(Void... params) {
-            Log.v(TAG, "doing work in Random Number Task");
+            Log.v(TAG, "Doing work in the background task");
             try {
+                //Execute this command in the background
                 Process process = Runtime.getRuntime().exec("logcat -s CS702");
                 BufferedReader br = new BufferedReader(new InputStreamReader(process.getInputStream()));
-
-                //int character = 0;
                 String line;
 
+                //While there is another line available for the bufferedReader to read
                 while((line = br.readLine()) != null)
                 {
-                    //tv.append("" + character);
                     int index = line.indexOf("CS702");
+                    //If the line contains CS702
                     if (index != -1) {
+                        //Format the String and add it to the List of messages being displayed
                         String tag = line.substring(index);
                         String message = tag.substring(tag.indexOf(":")+1);
 
@@ -169,14 +165,12 @@ public class MainActivity extends ActionBarActivity {
 //                            listViewTime.add(currentDate);
 
                         }
-
-//                        publishProgress("LINE - " + tag);
                     }
                 }
             }
             catch(IOException e) {
-
             }
+
             return null;
         }
 

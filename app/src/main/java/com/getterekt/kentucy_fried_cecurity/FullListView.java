@@ -4,14 +4,23 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Collections;
 
 
 public class FullListView extends ActionBarActivity {
+
+    private List<String> listViewContent = new ArrayList<String>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_full_list_view);
+        loadListWithDummyData();
     }
 
     @Override
@@ -34,5 +43,19 @@ public class FullListView extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void loadListWithDummyData() {
+        ListView listView = (ListView) findViewById(R.id.fullListView);
+        //Populate using dummy data
+        listViewContent.add("Instagram\t /usr/Photos\t 2 minutes ago\t 26/05/2015\t Background");
+        listViewContent.add("Facebook\t /usr/Contacts\t 10 minutes ago\t 26/05/2015\t Foreground");
+
+        //Reverse the list so that the newest Log message is at the top
+        Collections.reverse(listViewContent);
+
+        //Set up the ListView using a basic ArrayAdapter
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, listViewContent);
+        listView.setAdapter(adapter);
     }
 }
