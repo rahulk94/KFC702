@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.os.AsyncTask;
 import com.getterekt.kentucy_fried_cecurity.Java.FileAccess;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.ArrayList;
 import java.io.BufferedReader;
@@ -24,14 +25,23 @@ import java.io.InputStreamReader;
 public class MainActivity extends ActionBarActivity {
 
     RunLogcatInBackground logcat;
+    private static List<String> listViewContent = new ArrayList<String>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+//        Log.v("CS702", "OnCreate");
         RunLogcatInBackground task = new RunLogcatInBackground();
         task.execute();
         loadList();
+    }
+
+    protected void onResume() {
+        super.onResume();
+//        Log.v("CS702", "OnResume called");
+//        loadList();
+//        listViewContent.add("test");
     }
 
     @Override
@@ -76,21 +86,21 @@ public class MainActivity extends ActionBarActivity {
 
     public void loadList() {
 //        Log.v("CS702", "List loaded");
-//        ListView listView = (ListView) findViewById(R.id.summaryList);
+        ListView listView = (ListView) findViewById(R.id.summaryList);
 //        List<FileAccess> fileAccessList = new ArrayList<FileAccess>();
 //        fileAccessList.add(new FileAccess("App", "Accessed", "Time") {
 //            public String toString() {
 //                return "App\t\t  Accessed\t\t  Time";
 //            }
 //        });
-//
 //        fileAccessList.add(new FileAccess("Facebook", "usr/folders/photos", "2min ago"));
 //        fileAccessList.add(new FileAccess("Instagram", "usr/folders/videos", "12pm"));
 //        fileAccessList.add(new FileAccess("Firedroid", "usr/folders/contacts", "10am"));
-//
-//        ArrayAdapter<FileAccess> adapter = new ArrayAdapter<FileAccess>(this, android.R.layout.simple_list_item_1, fileAccessList);
-//        listView.setAdapter(adapter);
 
+        Collections.reverse(listViewContent);
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, listViewContent);
+        listView.setAdapter(adapter);
     }
 
     public class RunLogcatInBackground extends AsyncTask<Void, String, Void> {
@@ -134,8 +144,16 @@ public class MainActivity extends ActionBarActivity {
                     int index = line.indexOf("CS702");
                     if (index != -1) {
                         String tag = line.substring(index);
-                        String message = tag.substring(tag.indexOf(":"));
-                        publishProgress("LINE - " + tag);
+                        String message = tag.substring(tag.indexOf(":")+1);
+
+                        if (!(listViewContent.contains(message))) {
+                            listViewContent.add(message);
+                        } else {
+                            listViewContent.remove(message);
+                            listViewContent.add(message);
+                        }
+
+//                        publishProgress("LINE - " + tag);
                     }
                 }
             }
