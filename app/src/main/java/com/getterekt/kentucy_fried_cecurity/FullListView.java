@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Collections;
 
-
 public class FullListView extends ActionBarActivity {
 
     private List<String> listViewContent = new ArrayList<String>();
