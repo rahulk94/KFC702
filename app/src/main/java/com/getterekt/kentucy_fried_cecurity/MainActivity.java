@@ -26,6 +26,7 @@ import java.io.InputStreamReader;
 public class MainActivity extends ActionBarActivity {
 
     RunLogcatInBackground logcat;
+    RunLogcatInBackground task;
     //Contains a List of logging messages from apps. No duplicates exist in the List
     private static List<String> listViewContent = new ArrayList<String>();
     private static List<String> listViewAccess = new ArrayList<String>();
@@ -35,16 +36,23 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         Log.v("CS702", "OnCreate");
-        RunLogcatInBackground task = new RunLogcatInBackground();
+        task = new RunLogcatInBackground();
+
         task.execute();
         loadList();
     }
 
+    protected void onRestart() {
+        super.onRestart();
+        task = new RunLogcatInBackground();
+        task.execute();
+    }
+
     protected void onResume() {
         super.onResume();
-//        Log.v("CS702", "OnResume called");
-//        loadList();
+        System.out.println("Has reseumde");
     }
 
     @Override
@@ -83,11 +91,6 @@ public class MainActivity extends ActionBarActivity {
         Intent i = new Intent(this, PermissionsView.class);
         startActivity(i);
     }
-
-//    public void updateResults (String results) {
-//        TextView tv = (TextView) findViewById(R.id.logCatTextView);
-//        tv.append(results);
-//    }
 
     public void loadList() {
         ListView listView = (ListView) findViewById(R.id.summaryList);
@@ -128,7 +131,6 @@ public class MainActivity extends ActionBarActivity {
         protected void onProgressUpdate(String... values) {
             Log.v(TAG, "reporting back from the Random Number Task");
 //            updateResults(values[0].toString());
-
             super.onProgressUpdate(values);
         }
 
@@ -143,17 +145,16 @@ public class MainActivity extends ActionBarActivity {
             Log.v(TAG, "Doing work in the background task");
             try {
                 //Execute this command in the background
-                Process process = Runtime.getRuntime().exec("logcat -s CS702");
+                Process process = Runtime.getRuntime().exec("su -c logcat");
                 BufferedReader br = new BufferedReader(new InputStreamReader(process.getInputStream()));
                 String line;
 
                 //While there is another line available for the bufferedReader to read
                 while((line = br.readLine()) != null)
                 {
-                    int index = line.indexOf("CS702");
-                    //If the line contains CS702
-                    if (index != -1) {
-                        //Format the String and add it to the List of messages being displayed
+
+                    if (line.contains("CS702")) {
+                        int index = line.indexOf("CS702");
                         String tag = line.substring(index);
                         String message = tag.substring(tag.indexOf(":")+1);
 
@@ -176,6 +177,29 @@ public class MainActivity extends ActionBarActivity {
 
                         }
                     }
+
+//                    int index = line.indexOf("CS702");
+//                    //If the line contains CS702
+//                    if (index != -1) {
+//                        //Format the String and add it to the List of messages being displayed
+//                        String tag = line.substring(index);
+//                        String message = tag.substring(tag.indexOf(":")+1);
+//
+//                        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+//                        Date date = new Date();
+//                        String currentDate = dateFormat.format(date);
+//
+//                        if (!(listViewContent.contains(message))) {
+//                            listViewContent.add(message);
+////                            listViewTime.add(currentDate);
+//                        } else {
+//                            listViewContent.remove(message);
+////                            listViewTime.remove(currentDate);
+//                            listViewContent.add(message);
+////                            listViewTime.add(currentDate);
+//
+//                        }
+//                    }
                 }
             }
             catch(IOException e) {
