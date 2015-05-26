@@ -35,7 +35,7 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-//        Log.v("CS702", "OnCreate");
+        Log.v("CS702", "OnCreate");
         RunLogcatInBackground task = new RunLogcatInBackground();
         task.execute();
         loadList();
@@ -91,17 +91,23 @@ public class MainActivity extends ActionBarActivity {
 
     public void loadList() {
         ListView listView = (ListView) findViewById(R.id.summaryList);
-
+        ListView listView2 = (ListView) findViewById(R.id.summaryList2);
+        ListView listView3 = (ListView) findViewById(R.id.summaryList3);
 
         //Reverse the list so that the newest Log message is at the top
         Collections.reverse(listViewContent);
+        Collections.reverse(listViewAccess);
+        Collections.reverse(listViewTime);
 
         //Set up the ListView using a basic ArrayAdapter
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, listViewContent);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.simple_list_item, listViewContent);
         listView.setAdapter(adapter);
 
-//        ArrayAdapter<String> adapterTime = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, listViewTime);
-//        listView3.setAdapter(adapterTime);
+        ArrayAdapter<String> adapterAccess = new ArrayAdapter<String>(this, R.layout.simple_list_item, listViewAccess);
+        listView2.setAdapter(adapterAccess);
+
+        ArrayAdapter<String> adapterTime = new ArrayAdapter<String>(this, R.layout.simple_list_item, listViewTime);
+        listView3.setAdapter(adapterTime);
     }
 
     //A inner class that runs a process in the background
@@ -151,18 +157,22 @@ public class MainActivity extends ActionBarActivity {
                         String tag = line.substring(index);
                         String message = tag.substring(tag.indexOf(":")+1);
 
-                        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+                        DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
                         Date date = new Date();
                         String currentDate = dateFormat.format(date);
 
                         if (!(listViewContent.contains(message))) {
                             listViewContent.add(message);
-//                            listViewTime.add(currentDate);
+                            listViewAccess.add("/usr/bin");
+                            listViewTime.add(currentDate);
                         } else {
+                            int msgIndex = listViewContent.indexOf(message);
                             listViewContent.remove(message);
-//                            listViewTime.remove(currentDate);
+                            listViewAccess.remove(msgIndex);
+                            listViewTime.remove(msgIndex);
                             listViewContent.add(message);
-//                            listViewTime.add(currentDate);
+                            listViewAccess.add("/usr/bin");
+                            listViewTime.add(currentDate);
 
                         }
                     }
