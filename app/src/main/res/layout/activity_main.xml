@@ -6,15 +6,68 @@
     android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".MainActivity">
 
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="150px"
         android:layout_height="wrap_content"
-        android:id="@+id/logCatTextView">
+        android:text="App"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        android:id="@+id/appHeader"
+        android:gravity="center_vertical|center_horizontal"
+        android:layout_alignParentTop="true"
+        android:layout_alignRight="@+id/summaryList"
+        android:layout_alignEnd="@+id/summaryList">
+    </TextView>
+
+    <TextView
+        android:layout_width="150px"
+        android:layout_height="wrap_content"
+        android:text="Access"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        android:id="@+id/accessHeader"
+        android:gravity="center_vertical|center_horizontal"
+        android:layout_alignTop="@+id/appHeader"
+        android:layout_alignLeft="@+id/summaryList2"
+        android:layout_alignStart="@+id/summaryList2">
+    </TextView>
+
+    <TextView
+        android:layout_width="150px"
+        android:layout_height="wrap_content"
+        android:text="Time"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        android:id="@+id/timeHeader"
+        android:gravity="center_vertical|center_horizontal"
+        android:layout_alignParentTop="true"
+        android:layout_alignLeft="@+id/summaryList3"
+        android:layout_alignStart="@+id/summaryList3">
     </TextView>
 
     <ListView
-        android:layout_width="wrap_content"
+        android:layout_width="150px"
         android:layout_height="565px"
-        android:id="@+id/summaryList">
+        android:id="@+id/summaryList"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignTop="@+id/summaryList2">
+    </ListView>
+
+    <ListView
+        android:layout_width="150px"
+        android:layout_height="565px"
+        android:id="@+id/summaryList2"
+        android:layout_below="@+id/accessHeader"
+        android:layout_centerHorizontal="true">
+    </ListView>
+
+    <ListView
+        android:layout_width="150px"
+        android:layout_height="565px"
+        android:id="@+id/summaryList3"
+        android:layout_below="@+id/accessHeader"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true">
     </ListView>
 
     <Button
@@ -22,10 +75,9 @@
         android:layout_height="wrap_content"
         android:text="Full List View"
         android:id="@+id/FullListViewButton"
-        android:layout_alignParentBottom="true"
-        android:layout_alignRight="@+id/summaryList"
-        android:layout_alignEnd="@+id/summaryList"
-        android:onClick="fullListViewLoad"/>
+        android:onClick="fullListViewLoad"
+        android:layout_alignRight="@+id/summaryList3"
+        android:layout_alignBottom="@+id/ViewPermissionsButton" />
 
     <Button
         android:layout_width="200px"

@@ -13,7 +13,10 @@ import android.widget.TextView;
 import android.os.AsyncTask;
 import com.getterekt.kentucy_fried_cecurity.Java.FileAccess;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.ArrayList;
 import java.io.BufferedReader;
@@ -21,11 +24,12 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 
-
 public class MainActivity extends ActionBarActivity {
 
     RunLogcatInBackground logcat;
     private static List<String> listViewContent = new ArrayList<String>();
+    private static List<String> listViewAccess = new ArrayList<String>();
+    private static List<String> listViewTime = new ArrayList<String>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,14 +83,16 @@ public class MainActivity extends ActionBarActivity {
         startActivity(i);
     }
 
-    public void updateResults (String results) {
-        TextView tv = (TextView) findViewById(R.id.logCatTextView);
-        tv.append(results);
-    }
+//    public void updateResults (String results) {
+//        TextView tv = (TextView) findViewById(R.id.logCatTextView);
+//        tv.append(results);
+//    }
 
     public void loadList() {
 //        Log.v("CS702", "List loaded");
         ListView listView = (ListView) findViewById(R.id.summaryList);
+//        ListView listView3 = (ListView) findViewById(R.id.summaryList3);
+
 //        List<FileAccess> fileAccessList = new ArrayList<FileAccess>();
 //        fileAccessList.add(new FileAccess("App", "Accessed", "Time") {
 //            public String toString() {
@@ -101,6 +107,9 @@ public class MainActivity extends ActionBarActivity {
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, listViewContent);
         listView.setAdapter(adapter);
+
+//        ArrayAdapter<String> adapterTime = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, listViewTime);
+//        listView3.setAdapter(adapterTime);
     }
 
     public class RunLogcatInBackground extends AsyncTask<Void, String, Void> {
@@ -118,7 +127,7 @@ public class MainActivity extends ActionBarActivity {
         @Override
         protected void onProgressUpdate(String... values) {
             Log.v(TAG, "reporting back from the Random Number Task");
-            updateResults(values[0].toString());
+//            updateResults(values[0].toString());
             super.onProgressUpdate(values);
         }
 
@@ -146,11 +155,19 @@ public class MainActivity extends ActionBarActivity {
                         String tag = line.substring(index);
                         String message = tag.substring(tag.indexOf(":")+1);
 
+                        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+                        Date date = new Date();
+                        String currentDate = dateFormat.format(date);
+
                         if (!(listViewContent.contains(message))) {
                             listViewContent.add(message);
+//                            listViewTime.add(currentDate);
                         } else {
                             listViewContent.remove(message);
+//                            listViewTime.remove(currentDate);
                             listViewContent.add(message);
+//                            listViewTime.add(currentDate);
+
                         }
 
 //                        publishProgress("LINE - " + tag);
