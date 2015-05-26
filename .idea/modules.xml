@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Kentucy_Fried_Cecurity.iml" filepath="$PROJECT_DIR$/Kentucy_Fried_Cecurity.iml" />
+      <module fileurl="file://$PROJECT_DIR$/KFC702.iml" filepath="$PROJECT_DIR$/KFC702.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>
