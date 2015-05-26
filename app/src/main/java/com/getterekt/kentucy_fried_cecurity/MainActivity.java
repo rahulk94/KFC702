@@ -127,7 +127,7 @@ public class MainActivity extends ActionBarActivity {
             Log.v(TAG, "Doing work in the background task");
             try {
                 //Execute this command in the background
-                Process process = Runtime.getRuntime().exec("su logcat -s CS702");
+                Process process = Runtime.getRuntime().exec("logcat -s CS702");
                 BufferedReader br = new BufferedReader(new InputStreamReader(process.getInputStream()));
                 String line;
 
